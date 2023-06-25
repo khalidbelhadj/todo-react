@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .width {
+    width: min(20rem, 90vw);
+  }
+}
+
+@layer components {
+  .sections-container {
+    @apply flex flex-row flex-none mt-4 overflow-auto p-5 gap-5 h-screen;
+  }
+
+  .todo-list-container {
+    @apply width p-0 m-0;
+  }
+
+  .todo-list-container > * {
+    @apply p-2;
+  }
+
+  .todo-list {
+    @apply flex flex-col gap-3 width bg-gray-50 rounded-lg;
+  }
+
+  .todo-list > * {
+    @apply rounded-md py-1 px-2;
+  }
+
+  .todo-list-title {
+    @apply text-lg font-bold;
+  }
+
+  .todo-item {
+    @apply flex py-5 h-10 items-center justify-center hover:shadow-gray-300 shadow hover:shadow-md transition-all ease-in-out bg-white;
+  }
+
+  label {
+    @apply w-full hover:cursor-pointer truncate text-gray-900 pl-2;
+  }
+
+  .add-button {
+    @apply border-none hover:cursor-pointer text-gray-600 text-center hover:shadow-gray-300 shadow hover:shadow-md transition-all ease-in-out bg-white;
+  }
+
+  .todo-input {
+    @apply focus-within:outline-none focus-within:outline-gray-300;
+  }
+
+  .delete-button-container {
+    @apply w-6 h-6;
+  }
+
+  .delete-button {
+    @apply opacity-0 hover:opacity-100 transition-all ease-in-out text-gray-600 flex justify-center items-center w-6 h-6 rounded;
+  }
+
+  .dragging {
+    @apply text-gray-200 border border-gray-300 invisible;
+  }
+
+  .checkbox-circle {
+    @apply w-5 h-5 rounded-full border-solid border-gray-300 border overflow-hidden group-hover/checkbox:bg-gray-100 text-center transition-colors ease-in-out;
+  }
+
+  .checkbox-circle > svg {
+    @apply w-full h-full relative bottom-[2px] right-[3px] m-0 border-none opacity-0 group-hover/checkbox:opacity-70 transition-all ease-in-out text-gray-500 rounded-full;
+  }
+
+  .completed {
+    @apply bg-gray-300 group-hover/checkbox:bg-gray-200;
+  }
+
+  .completed > svg {
+    @apply opacity-70;
+  }
+}

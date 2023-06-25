@@ -1,0 +1,2 @@
+- [ ] Add animations for drag and drop
+- [ ] Fix the bug where dropping somewhere other than the lists keeps the item as marked dragged
