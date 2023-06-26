@@ -1,28 +1,24 @@
 import { useEffect, useState } from 'react';
 import TodoList from './TodoList';
-import { TodoItem } from './typings/typings';
+import { TodoItem } from '../typings/typings';
 import AddSectionButton from './AddSectionButton';
-import { isWhitespace } from '../public/utils';
+import { isWhitespace } from '../../public/utils';
+import { useDrag } from '../contexts/DragContext';
 
-export type Props = {
-  showCompleted: boolean;
-};
-
-export default function TodoListsContainer({ showCompleted }: Props) {
+export default function TodoListsContainer() {
+  const [, setDraggingId] = useDrag();
   const [todos, setTodos] = useState<TodoItem[]>(
     JSON.parse(localStorage.getItem('todos') || '[]')
   );
   const [sections, setSections] = useState<string[]>(
     JSON.parse(localStorage.getItem('sections') || '["default"]')
   );
+
   const addSection = (section: string) => {
     if (section.split('').some((char) => !isWhitespace(char))) {
       setSections((prevSections) => [...prevSections, section]);
     }
   };
-
-  const deleteSection = (section: string) =>
-    setSections((prevSections) => prevSections.filter((s) => s !== section));
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
@@ -30,12 +26,12 @@ export default function TodoListsContainer({ showCompleted }: Props) {
   });
 
   useEffect(() => {
-    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    const handleDrop = (event: DragEvent) => {
       event.preventDefault();
-      setDraggingElementId('');
+      setDraggingId('');
     };
 
-    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    const handleDragOver = (event: DragEvent) => {
       event.preventDefault();
     };
 
@@ -46,9 +42,7 @@ export default function TodoListsContainer({ showCompleted }: Props) {
       window.removeEventListener('drop', handleDrop);
       window.removeEventListener('dragstart', handleDragOver);
     };
-  }, []);
-
-  const [draggingElementId, setDraggingElementId] = useState<string>('');
+  }, [setDraggingId]);
 
   return (
     <div className="sections-container">
@@ -58,9 +52,6 @@ export default function TodoListsContainer({ showCompleted }: Props) {
           sectionTitle={section}
           todos={todos}
           setTodos={setTodos}
-          showCompleted={showCompleted}
-          setDraggingElementId={setDraggingElementId}
-          draggingElementId={draggingElementId}
         />
       ))}
 

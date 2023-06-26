@@ -38,7 +38,7 @@
     hover:shadow-gray-300 hover:shadow-md transition-all ease-in-out;
   }
 
-  label {
+  .todo-item > label {
     @apply w-full hover:cursor-pointer truncate text-gray-900 pl-2;
   }
 
