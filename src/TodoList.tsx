@@ -63,7 +63,7 @@ export default function TodoList({
 
   const deleteTodo = (id: string) => {
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
-  }
+  };
 
   const toggleDone = (id: string) => {
     const newTodos = [...todos];
@@ -113,22 +113,18 @@ export default function TodoList({
   );
 
   return (
-    <div className="todo-list-container"
-          key={sectionTitle}
-    >
-
+    <div className="todo-list-container" key={sectionTitle}>
       <div className="todo-list" onDragOver={dragOver}>
+        <div className="flex">
+          <div className="todo-list-title">{sectionTitle}</div>
 
-      <div className="flex">
-        <div className="todo-list-title">{sectionTitle}</div>
-
-        {showCompleted && (
-          <div className="ml-auto font-mono">
-            {filteredTodos.filter((todo) => todo.done).length}/
-            {filteredTodos.length}
-          </div>
-        )}
-      </div>
+          {showCompleted && (
+            <div className="ml-auto font-mono">
+              {filteredTodos.filter((todo) => todo.done).length}/
+              {filteredTodos.length}
+            </div>
+          )}
+        </div>
         {filteredTodos.map((todo, i) => {
           return (
             <>

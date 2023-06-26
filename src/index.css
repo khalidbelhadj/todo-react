@@ -34,7 +34,8 @@
   }
 
   .todo-item {
-    @apply flex py-5 h-10 items-center justify-center hover:shadow-gray-300 shadow hover:shadow-md transition-all ease-in-out bg-white;
+    @apply flex py-5 h-10 items-center justify-center shadow bg-white
+    hover:shadow-gray-300 hover:shadow-md transition-all ease-in-out;
   }
 
   label {
