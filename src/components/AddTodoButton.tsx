@@ -20,11 +20,8 @@ export default function AddTodoButton({ addTodo }: Props) {
   };
 
   useEffect(() => {
-    if (prompting) {
-      const current = promptRef.current;
-      if (current) {
-        current.focus();
-      }
+    if (prompting && promptRef.current) {
+      promptRef.current.focus();
     }
   }, [prompting]);
 

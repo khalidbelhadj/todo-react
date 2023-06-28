@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
+import { useData } from '../contexts/DataContext';
 
-export type Props = {
-  addSection: (title: string) => void;
-};
-
-export default function AddSectionButton({ addSection }: Props) {
+export default function AddSectionButton() {
   const [prompting, setPrompting] = useState(false);
   const promptRef = useRef<HTMLInputElement>(null);
+  const [, dispatch] = useData();
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       const target = event.target as HTMLInputElement;
-      addSection(target.value);
+      dispatch({
+        type: 'ADD_SECTION',
+        section: target.value,
+      })
       setPrompting(false);
       target.value = '';
     }

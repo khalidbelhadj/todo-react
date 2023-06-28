@@ -34,10 +34,11 @@
   }
 
   .todo-item {
-    @apply flex py-5 h-10 items-center justify-center hover:shadow-gray-300 shadow hover:shadow-md transition-all ease-in-out bg-white;
+    @apply flex py-5 h-10 items-center justify-center shadow bg-white
+    hover:shadow-gray-300 hover:shadow-md transition-all ease-in-out;
   }
 
-  label {
+  .todo-item > label {
     @apply w-full hover:cursor-pointer truncate text-gray-900 pl-2;
   }
 
@@ -76,4 +77,29 @@
   .completed > svg {
     @apply opacity-70;
   }
+
+  .form-container {
+    @apply border p-5 w-fit rounded-md width m-auto mt-5;
+  }
+  .form-header {
+    @apply text-xl text-center font-semibold mb-3;
+  }
+
+  .form-error-message {
+    @apply bg-red-200 rounded mx-auto p-1 text-center my-3 truncate hover:overflow-visible hover:whitespace-break-spaces;
+  }
+
+  .form-success-message {
+    @apply bg-green-200 rounded mx-auto p-1 text-center my-3 truncate hover:overflow-visible hover:whitespace-break-spaces;
+  }
+
+  .submit-button {
+    @apply rounded-md bg-blue-500 text-gray-50 mx-10 mt-5 p-1 hover:cursor-pointer hover:bg-blue-400;
+
+  }
+
+  .form-input {
+    @apply outline-none outline-gray-200 rounded-sm;
+  }
+
 }
