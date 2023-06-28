@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import firebase from 'firebase/compat/app';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -26,11 +26,11 @@ export default function Login() {
 
   return (
     <>
-      <div className="border p-5 w-fit rounded-md mx-auto mt-5 width">
-        <h2 className="text-xl text-center font-semibold mb-3">Login</h2>
+      <div className="form-container">
+        <h2 className="form-header">Login</h2>
 
         {errorMessage !== '' && (
-          <div className="bg-red-200 rounded mx-auto p-1 text-center my-3 truncate hover:overflow-visible hover:whitespace-break-spaces">
+          <div className="form-error-message">
             {errorMessage}
           </div>
         )}
@@ -38,7 +38,7 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="flex-col flex gap-2">
           <label htmlFor="email">Email:</label>
           <input
-            className="outline-none outline-gray-200 rounded-sm"
+            className="form-input"
             type="email"
             id="email"
             name="email"
@@ -48,7 +48,7 @@ export default function Login() {
 
           <label htmlFor="password">Password:</label>
           <input
-            className="outline-none outline-gray-200 rounded-sm"
+            className="form-input"
             type="password"
             id="password"
             name="password"
@@ -57,22 +57,24 @@ export default function Login() {
           />
 
           <input
-            className="rounded-md bg-blue-500 text-gray-50 mx-10 mt-5 p-1 hover:cursor-pointer hover:bg-blue-400"
+            className="submit-button"
             type="submit"
             value="Submit"
           />
         </form>
-        <div className="text-center text-xs mt-2 text-blue-500">
+
+        <p className="text-center text-xs mt-2 text-blue-500">
           <Link to="/forgot-password">Forgot password?</Link>
-        </div>
+        </p>
+
       </div>
-      <div className="text-center text-xs mt-1">
+      <p className="text-center text-xs mt-1">
         Don't have an account?{' '}
         <Link className="text-blue-500" to="/signup">
           Sign up
         </Link>
         .
-      </div>
+      </p>
     </>
   );
 }

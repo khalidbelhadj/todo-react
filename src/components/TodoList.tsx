@@ -1,34 +1,22 @@
-import { Dispatch, useEffect, useRef } from 'react';
-import AddTodoButton from './AddTodoButton';
-import TodoElement from './TodoElement';
-import { TodoItem } from '../typings/typings';
-import { useUserConfig } from '../contexts/UserConfigContext';
-import { useDrag } from '../contexts/DragContext';
-import {
-  addTodo,
-  changeSection,
-  swapTodos,
-  toggleDone,
-  deleteTodo,
-} from '../../public/utils';
+import AddTodoButton from "./AddTodoButton";
+import TodoElement from "./TodoElement";
+import { useEffect, useRef } from "react";
+import { useDrag } from "../contexts/DragContext";
+import { useData } from "../contexts/DataContext";
 
-export type Props = {
-  sectionTitle: string;
-  todos: TodoItem[];
-  setTodos: Dispatch<React.SetStateAction<TodoItem[]>>;
-};
+export type Props = { sectionTitle: string };
 
-export default function TodoList({ sectionTitle, todos, setTodos }: Props) {
-  const todosRef = useRef<HTMLDivElement[]>([]);
-  const { showCompleted } = useUserConfig();
+export default function TodoList({ sectionTitle }: Props) {
+  const [state, dispatch] = useData();
   const [draggingId] = useDrag();
+  const todosRef = useRef<HTMLDivElement[]>([]);
 
   const dragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
 
-    let dragingOverId = '';
+    let dragingOverId = "";
     const otherTodos = todosRef.current.filter(
-      (todo) => todo['id'] !== draggingId
+      (todo) => todo["id"] !== draggingId,
     );
 
     for (const todo of otherTodos) {
@@ -39,20 +27,30 @@ export default function TodoList({ sectionTitle, todos, setTodos }: Props) {
       }
     }
 
-    if (dragingOverId === '') {
-      setTodos(changeSection(todos, draggingId, sectionTitle));
+    if (dragingOverId === "") {
+      dispatch({
+        type: "UPDATE_TODO_SECTION",
+        todoId: draggingId,
+        newSection: sectionTitle,
+      });
     } else {
-      setTodos(swapTodos(todos, draggingId, dragingOverId));
+      dispatch({
+        type: "SWAP_TODOS",
+        sourceId: draggingId,
+        destinationId: dragingOverId,
+      });
     }
   };
 
   useEffect(() => {
     todosRef.current = todosRef.current.filter((todo) => todo !== null);
-  }, [todos, showCompleted]);
+  }, [state]);
 
-  const filteredTodos = todos.filter(
-    (todo) => todo.section === sectionTitle && (showCompleted || !todo.done)
-  );
+  const filteredTodos = state?.todos.filter(
+    (todo) =>
+      todo.section === sectionTitle &&
+      (state?.config.showCompleted || !todo.done),
+  ) || [];
 
   return (
     <div className="todo-list-container" key={sectionTitle}>
@@ -60,20 +58,19 @@ export default function TodoList({ sectionTitle, todos, setTodos }: Props) {
         <div className="flex">
           <div className="todo-list-title">{sectionTitle}</div>
 
-          {showCompleted && (
+          {state?.config.showCompleted && (
             <div className="ml-auto font-mono">
               {filteredTodos.filter((todo) => todo.done).length}/
               {filteredTodos.length}
             </div>
           )}
         </div>
+
         {filteredTodos.map((todo, i) => {
           return (
             <>
               <TodoElement
                 todo={todo}
-                toggleDone={(id: string) => setTodos(toggleDone(todos, id))}
-                deleteTodo={(id: string) => setTodos(deleteTodo(todos, id))}
                 ref={(el: HTMLDivElement) => (todosRef.current[i] = el)}
               />
             </>
@@ -81,7 +78,8 @@ export default function TodoList({ sectionTitle, todos, setTodos }: Props) {
         })}
 
         <AddTodoButton
-          addTodo={(content) => setTodos(addTodo(todos, content, sectionTitle))}
+          addTodo={(content: string) =>
+            dispatch({ type: "ADD_TODO", content, section: sectionTitle })}
         />
       </div>
     </div>

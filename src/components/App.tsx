@@ -1,10 +1,11 @@
 import { AuthProvider } from '../contexts/AuthContext';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Signup from './Signup';
-import Login from './Login';
-import ForgotPassword from './ForgotPassword';
-import PrivateRoute from './PrivateRoute';
+import Signup from './authentication/Signup';
+import Login from './authentication/Login';
+import ForgotPassword from './authentication/ForgotPassword';
+import PrivateRoute from './authentication/PrivateRoute';
 import Dashboard from './Dashboard';
+import { DataProvider } from '../contexts/DataContext';
 
 export default function App() {
   return (
@@ -18,7 +19,7 @@ export default function App() {
             path="/"
             element={
               <PrivateRoute>
-                <Dashboard />
+                  <Dashboard />
               </PrivateRoute>
             }
           />

@@ -1,10 +1,13 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { auth } from '../components/firebase';
+import { auth, database } from '../firebase';
 import firebase from 'firebase/compat/app';
+import { initialData } from '../../utils';
 
 export type AuthContextType = {
   currentUser: firebase.User | null;
   signup: (
+    firstName: string,
+    lastName: string,
     email: string,
     password: string
   ) => Promise<firebase.auth.UserCredential>;
@@ -36,8 +39,14 @@ export function AuthProvider({ children }: Props) {
   const [currentUser, setCurrentUser] = useState<firebase.User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const signup = async (email: string, password: string) => {
-    return auth.createUserWithEmailAndPassword(email, password);
+  const signup = async (firstName: string, lastName: string, email: string, password: string) => {
+    const credential = await auth.createUserWithEmailAndPassword(email, password);
+    database.users.doc(credential.user?.uid).set({
+      ...initialData,
+      firstName,
+      lastName,
+    });
+    return credential;
   };
 
   const login = async (email: string, password: string) => {

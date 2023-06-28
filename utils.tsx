@@ -1,5 +1,17 @@
 import { v4 } from "uuid";
-import { TodoItem } from "../src/typings/typings";
+import { TodoItem } from "./src/typings/typings";
+import { UserData, database } from "./src/firebase";
+import { updateDoc } from "firebase/firestore";
+
+export const initialData: UserData = {
+  firstName: '',
+  lastName: '',
+  todos: [],
+  sections: ['default'],
+  config: {
+    showCompleted: false
+  }
+}
 
 export function isWhitespace(char: string) {
   return char == ' ' || char == '\n' || char == '\r';
@@ -24,7 +36,7 @@ export function deleteTodo(todos: TodoItem[], id: string): TodoItem[] {
   return todos.filter((todo) => todo.id !== id);
 }
 
-export function toggleDone(todos: TodoItem[], id: string): TodoItem[] {
+export function toggleTodo(todos: TodoItem[], id: string): TodoItem[] {
   const newTodos = [...todos];
   const todo = newTodos.find((todo) => todo.id === id);
   if (todo) {
@@ -55,7 +67,7 @@ export function swapTodos(todos: TodoItem[], id: string, otherId: string): TodoI
   return todos;
 }
 
-export function changeSection(todos: TodoItem[], id: string, newSection: string): TodoItem[] {
+export function updateTodoSection(todos: TodoItem[], id: string, newSection: string): TodoItem[] {
   const newTodos = [...todos];
   const todo = newTodos.find((todo) => todo.id === id);
 
@@ -65,3 +77,27 @@ export function changeSection(todos: TodoItem[], id: string, newSection: string)
   }
   return todos;
 }
+
+export function addSection(sections: string[], section: string): string[] {
+  if (section.split("").some((char) => !isWhitespace(char))) {
+    return[...sections, section];
+  }
+  return sections;
+}
+
+export async function getUserData(userId: string) {
+  const currentUser = await database.users.doc(userId).get();
+
+  if (currentUser.exists) {
+    return currentUser.data();
+  }
+  else {
+    return null;
+  }
+}
+
+export async function setUserData(userId: string, data: UserData) {
+  const document = database.users.doc(userId);
+  await updateDoc(document, data);
+}
+

@@ -1,7 +1,9 @@
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
-// console.log(import.meta.env.VITE_FIREBASE_API_KEY);
+import 'firebase/compat/firestore';
+import { TodoItem } from './typings/typings';
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -13,6 +15,21 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const app = firebase.initializeApp(firebaseConfig);
+const app = firebase.initializeApp(firebaseConfig);
+const firestore = app.firestore();
+
 export const auth = app.auth();
+export type UserData = {
+  firstName: string;
+  lastName: string;
+  todos: TodoItem[];
+  sections: string[];
+  config: {
+    showCompleted: boolean;
+  }
+}
+export const database = {
+  users: firestore.collection('users') as firebase.firestore.CollectionReference<UserData>,
+}
+
 export default app;

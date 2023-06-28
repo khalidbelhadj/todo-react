@@ -1,25 +1,18 @@
-import { useEffect } from 'react';
 import Header from './Header';
 import TodoListsContainer from './TodoListsContainer';
-import {
-  UserConfigProvider,
-  useUserConfig,
-} from '../contexts/UserConfigContext';
 import { DragContextProvider } from '../contexts/DragContext';
+import { DataProvider } from '../contexts/DataContext';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Dashboard() {
-  const { showCompleted } = useUserConfig();
-
-  useEffect(() => {
-    localStorage.setItem('showCompleted', JSON.stringify(showCompleted));
-  });
+  const { currentUser } = useAuth();
 
   return (
-    <UserConfigProvider>
+    <DataProvider userId={currentUser ? currentUser.uid : ''}>
       <Header />
       <DragContextProvider>
         <TodoListsContainer />
       </DragContextProvider>
-    </UserConfigProvider>
+    </DataProvider>
   );
 }

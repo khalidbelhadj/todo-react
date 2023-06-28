@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useUserConfig } from '../contexts/UserConfigContext';
+import { useData } from '../contexts/DataContext';
 
 export default function Header() {
   const [date, setDate] = useState(new Date());
-  const { currentUser, logout } = useAuth();
-  const { showCompleted, toggleShowCompleted } = useUserConfig();
+  const [state, dispatch] = useData();
+  const { logout } = useAuth();
 
   const handleLogout = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -20,11 +20,11 @@ export default function Header() {
     <div className="flex px-3 py-1 border shadow-sm overflow-x-auto">
       <div className="font-bold flex-grow text-lg">TODO</div>
 
-      <div>{currentUser?.email}</div>
+      <div>{state?.firstName}</div>
 
       <button
         className={
-          'mr-2 rounded border px-1 ' + (showCompleted && 'bg-gray-100')
+          'mr-2 rounded border px-1 ' + (state?.config.showCompleted && 'bg-gray-100')
         }
         onClick={handleLogout}
       >
@@ -33,9 +33,11 @@ export default function Header() {
 
       <button
         className={
-          'mr-2 rounded border px-1 ' + (showCompleted && 'bg-gray-100')
+          'mr-2 rounded border px-1 ' + (state?.config.showCompleted && 'bg-gray-100')
         }
-        onClick={toggleShowCompleted}
+        onClick={() => dispatch({
+          type: 'TOGGLE_SHOW_COMPLETED'
+        })}
       >
         Show Completed
       </button>
